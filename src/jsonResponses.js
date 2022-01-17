@@ -44,15 +44,14 @@ const addUser = (request, response, body) => {
     return respondJSON(request, response, 400, responseJSON);
   }
 
-  //default status code to 201 created
-  let responseCode = 201;
+  //default status code to 204 updated
+  let responseCode = 204;
 
-  //if that user's name already exists in our object
-  //then switch to a 204 updated status
-  if (users[body.name]) {
-    responseCode = 204;
-  } else {
-    //otherwise create an object with that name
+  //If the user doesn't exist yet
+  if(!users[body.name]) {
+    
+    //Set the status code to 201 (created) and create an empty user
+    responseCode = 201;
     users[body.name] = {};
   }
 
