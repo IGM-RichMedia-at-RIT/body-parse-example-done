@@ -2,17 +2,17 @@
   "name": "simple_http",
   "version": "0.0.0",
   "description": "A simple HTTP server using POST and status codes.",
-  "main": "server.js",
+  "main": "./src/server.js",
   "scripts": {
     "start": "node ./src/server.js",
     "pretest": "eslint ./src --fix",
     "test": "echo \"Tests complete\""
   },
-  "author": "Cody Van De Mark",
+  "author": "Cody Van De Mark / Austin Willoughby",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^4.5.0",
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-import": "^2.7.0"
+    "eslint": "^8.23.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0"
   }
 }
