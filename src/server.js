@@ -1,6 +1,4 @@
 const http = require('http'); // pull in http module
-// url module for parsing url string
-const url = require('url');
 // querystring module for parsing querystrings from url
 const query = require('querystring');
 // pull in our custom files

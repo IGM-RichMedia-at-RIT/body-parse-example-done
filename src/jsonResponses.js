@@ -29,7 +29,7 @@ const getUsers = (request, response) => {
 };
 
 // function to add a user from a POST body
-const addUser = (request, response, body) => {
+const addUser = (request, response) => {
   // default json message
   const responseJSON = {
     message: 'Name and age are both required.',
