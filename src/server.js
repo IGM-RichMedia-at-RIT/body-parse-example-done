@@ -48,11 +48,11 @@ const parseBody = (request, response, handler) => {
   // us data in X-WWW-FORM-URLENCODED format. If it was in JSON we could use JSON.parse.
   request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
-    const bodyParams = query.parse(bodyString);
+    request.body = query.parse(bodyString);
 
     // Once we have the bodyParams object, we will call the handler function. We then
     // proceed much like we would with a GET request.
-    handler(request, response, bodyParams);
+    handler(request, response);
   });
 };
 
@@ -81,7 +81,8 @@ const handleGet = (request, response, parsedUrl) => {
 const onRequest = (request, response) => {
   // parse url into individual parts
   // returns an object of url parts by name
-  const parsedUrl = url.parse(request.url);
+  const protocol = request.connection.encrypted ? 'https' : 'http';
+  const parsedUrl = new URL(request.url, `${protocol}://${request.headers.host}`);
 
   // check if method was POST, otherwise assume GET
   // for the sake of this example

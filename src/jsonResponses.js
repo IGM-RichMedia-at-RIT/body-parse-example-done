@@ -39,7 +39,7 @@ const addUser = (request, response, body) => {
   // We might want more validation than just checking if they exist
   // This could easily be abused with invalid types (such as booleans, numbers, etc)
   // If either are missing, send back an error message as a 400 badRequest
-  if (!body.name || !body.age) {
+  if (!request.body.name || !request.body.age) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
@@ -47,16 +47,19 @@ const addUser = (request, response, body) => {
   // default status code to 204 updated
   let responseCode = 204;
 
+  // grab name and age out of request.body for convenience
+  const {name, age} = request.body;
+
   // If the user doesn't exist yet
-  if (!users[body.name]) {
+  if (!users[name]) {
     // Set the status code to 201 (created) and create an empty user
     responseCode = 201;
-    users[body.name] = {};
+    users[name] = {};
   }
 
   // add or update fields for this user name
-  users[body.name].name = body.name;
-  users[body.name].age = body.age;
+  users[name].name = name;
+  users[name].age = age;
 
   // if response is created, then set our created message
   // and sent response with a message
