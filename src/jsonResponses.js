@@ -7,15 +7,18 @@ const users = {};
 // function to respond with a json object
 // takes request, response, status code and object to send
 const respondJSON = (request, response, status, object) => {
-  response.writeHead(status, { 'Content-Type': 'application/json' });
-  response.write(JSON.stringify(object));
-  response.end();
-};
+  const content = JSON.stringify(object);
+  response.writeHead(status, { 
+    'Content-Type': 'application/json',
+    'Content-Length': Buffer.byteLength(content, 'utf8'),
+  });
 
-// function to respond without json body
-// takes request, response and status code
-const respondJSONMeta = (request, response, status) => {
-  response.writeHead(status, { 'Content-Type': 'application/json' });
+  // HEAD requests don't get a body with their response.
+  // Similarly, 204 status codes are "no content" responses
+  // so they also do not get a response body.
+  if(request.method !== 'HEAD' || status !== 204){
+    response.write(content);
+  }
   response.end();
 };
 
@@ -67,10 +70,12 @@ const addUser = (request, response) => {
     responseJSON.message = 'Created Successfully';
     return respondJSON(request, response, responseCode, responseJSON);
   }
-  // 204 has an empty payload, just a success
-  // It cannot have a body, so we just send a 204 without a message
-  // 204 will not alter the browser in any way!!!
-  return respondJSONMeta(request, response, responseCode);
+
+  // When we send back a 204 status code, it will not send response
+  // body. However, if we didn't pass in an object as the 4th param
+  // to our respondJSON function it would break. So we send in an
+  // empty object, which will stringify to an empty string.
+  return respondJSON(request, response, responseCode, {});
 };
 
 // public exports
