@@ -19,6 +19,7 @@ const respondJSON = (request, response, status, object) => {
   if (request.method !== 'HEAD' || status !== 204) {
     response.write(content);
   }
+  
   response.end();
 };
 
