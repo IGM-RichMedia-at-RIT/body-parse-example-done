@@ -8,7 +8,7 @@ const users = {};
 // takes request, response, status code and object to send
 const respondJSON = (request, response, status, object) => {
   const content = JSON.stringify(object);
-  response.writeHead(status, { 
+  response.writeHead(status, {
     'Content-Type': 'application/json',
     'Content-Length': Buffer.byteLength(content, 'utf8'),
   });
@@ -16,7 +16,7 @@ const respondJSON = (request, response, status, object) => {
   // HEAD requests don't get a body with their response.
   // Similarly, 204 status codes are "no content" responses
   // so they also do not get a response body.
-  if(request.method !== 'HEAD' || status !== 204){
+  if (request.method !== 'HEAD' || status !== 204) {
     response.write(content);
   }
   response.end();
@@ -51,7 +51,7 @@ const addUser = (request, response) => {
   let responseCode = 204;
 
   // grab name and age out of request.body for convenience
-  const {name, age} = request.body;
+  const { name, age } = request.body;
 
   // If the user doesn't exist yet
   if (!users[name]) {
