@@ -39,20 +39,22 @@ const addUser = (request, response) => {
     message: 'Name and age are both required.',
   };
 
+  // grab name and age out of request.body for convenience
+  // If either name or age do not exist in the request,
+  // they will be set to undefined
+  const { name, age } = request.body;
+
   // check to make sure we have both fields
   // We might want more validation than just checking if they exist
   // This could easily be abused with invalid types (such as booleans, numbers, etc)
   // If either are missing, send back an error message as a 400 badRequest
-  if (!request.body.name || !request.body.age) {
+  if (!name || !age) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 
   // default status code to 204 updated
   let responseCode = 204;
-
-  // grab name and age out of request.body for convenience
-  const { name, age } = request.body;
 
   // If the user doesn't exist yet
   if (!users[name]) {
