@@ -16,7 +16,7 @@ const respondJSON = (request, response, status, object) => {
   // HEAD requests don't get a body with their response.
   // Similarly, 204 status codes are "no content" responses
   // so they also do not get a response body.
-  if (request.method !== 'HEAD' || status !== 204) {
+  if (request.method !== 'HEAD' && status !== 204) {
     response.write(content);
   }
   
@@ -60,11 +60,13 @@ const addUser = (request, response) => {
   if (!users[name]) {
     // Set the status code to 201 (created) and create an empty user
     responseCode = 201;
-    users[name] = {};
+    users[name] = {
+      name: name,
+    };
   }
 
   // add or update fields for this user name
-  users[name].name = name;
+  
   users[name].age = age;
 
   // if response is created, then set our created message
