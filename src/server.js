@@ -41,12 +41,21 @@ const parseBody = (request, response, handler) => {
   // The final event is when the request is finished sending and we have recieved
   // all of the information. When the request "ends", we can proceed. Turn the body
   // array into a single entity using Buffer.concat, then turn that into a string.
-  // With that string, we can use the querystring library to turn it into an object
-  // stored in bodyParams. We can do this because we know that the client sends
-  // us data in X-WWW-FORM-URLENCODED format. If it was in JSON we could use JSON.parse.
+  // Once we have that string, we can check the request's content-type header to see
+  // if it is in URL Encoded or JSON format, and parse it properly. If it's in neither
+  // we can send back an error to the user.
   request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
-    request.body = query.parse(bodyString);
+    const type = request.headers['content-type'];
+    if(type === 'application/x-www-form-urlencoded') {
+      request.body = query.parse(bodyString);
+    } else if (type === 'application/json') {
+      request.body = JSON.parse(bodyString);
+    } else {
+      response.writeHead(400, { 'Content-Type': 'application/json' });
+      response.write(JSON.stringify({ error: 'invalid data format' }));
+      return response.end();
+    }
 
     // Once we have the bodyParams object, we will call the handler function. We then
     // proceed much like we would with a GET request.
